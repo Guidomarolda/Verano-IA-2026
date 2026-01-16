@@ -1,7 +1,7 @@
 import numpy as np
 
 x = np.array([7, 8, 6, 9, 10])
-
+# Prueba 1
 print("x:", x)
 print("media:", x.mean())
 print("std:", x.std())
