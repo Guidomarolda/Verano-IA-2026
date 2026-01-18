@@ -4,6 +4,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import precision_score, recall_score, f1_score
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import export_text
+
 
 # Dataset
 data = {
@@ -21,7 +25,7 @@ df["aprobado"] = (df["nota"] >= 7).astype(int)
 print(df)
 
 # Variables de entrada
-X = df[["edad", "altura", "trabaja"]]
+X = df[["edad","altura" ,"trabaja"]]
 
 # Variable objetivo (clasificación)
 y = df["aprobado"]
@@ -84,3 +88,36 @@ print("\nAccuracy:", acc)
 # Matriz de confusión
 print("\nConfusion Matrix:")
 print(confusion_matrix(y_test, y_pred))
+
+# Métricas extra
+print("\nPrecision:", precision_score(y_test, y_pred))
+print("Recall:", recall_score(y_test, y_pred))
+print("F1:", f1_score(y_test, y_pred))
+
+# Arbol de decisión
+tree = DecisionTreeClassifier(
+    max_depth=2,
+    random_state=1
+)
+
+tree.fit(X_train, y_train)
+
+y_pred_tree = tree.predict(X_test)
+
+print("\nPredicción árbol:")
+print(y_pred_tree)
+
+print("Valor real:")
+print(y_test.values)
+
+print("Accuracy árbol:", accuracy_score(y_test, y_pred_tree))
+print("Confusion Matrix árbol:")
+print(confusion_matrix(y_test, y_pred_tree))
+
+# Visualizar árbol
+print(
+    export_text(
+        tree,
+        feature_names=list(X_train.columns)
+    )
+)
