@@ -7,6 +7,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.metrics import precision_score, recall_score, f1_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import export_text
+from sklearn.model_selection import cross_val_score
 
 
 # Dataset
@@ -121,3 +122,17 @@ print(
         feature_names=list(X_train.columns)
     )
 )
+
+# Validación cruzada
+scores = cross_val_score(
+    model,
+    X_scaled,
+    y,
+    cv=3, #3 divisiones distintas
+    scoring="accuracy" #accuracy en cada una
+)
+
+print("Scores por fold:", scores)
+print("Accuracy promedio:", scores.mean())
+print(y.value_counts())
+
