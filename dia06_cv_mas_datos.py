@@ -6,6 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.pipeline import Pipeline
+from sklearn.ensemble import RandomForestClassifier
 
 # Reproducible
 rng = np.random.default_rng(42)
@@ -88,3 +89,34 @@ for d in [1, 2, 3, 4, 5, None]:
     scores = cross_val_score(tree, X, y, cv=cv, scoring="accuracy")
     label = f"depth={d}" if d is not None else "depth=None"
     print(f"{label:10s} → scores={scores.round(2)} | mean={scores.mean():.2f}")
+
+# Random Forest
+print("\n=== RANDOM FOREST ===")
+
+rf = RandomForestClassifier(
+    n_estimators=300,      # cantidad de árboles
+    max_depth=2,           # probamos simple primero (como tu mejor depth)
+    random_state=1
+)
+
+rf_scores = cross_val_score(rf, X, y, cv=cv, scoring="accuracy")
+print("RandomForest CV scores:", rf_scores.round(2))
+print("RandomForest CV mean:", rf_scores.mean())
+
+# Entrenar un modelo final (con TODO el dataset) solo para ver importancias
+rf.fit(X, y)
+print("\nFeature importance (promedio en el bosque):")
+for col, imp in zip(X.columns, rf.feature_importances_):
+    print(f"{col}: {imp:.3f}")
+
+# Probar distintos max_depth
+print("\nProbando distintos max_depth en RandomForest:")
+for d in [1, 2, 3, 4, None]:
+    rf = RandomForestClassifier(
+        n_estimators=300,
+        max_depth=d,
+        random_state=1
+    )
+    scores = cross_val_score(rf, X, y, cv=cv, scoring="accuracy")
+    label = f"rf_depth={d}" if d is not None else "rf_depth=None"
+    print(f"{label:12s} -> scores={scores.round(2)} | mean={scores.mean():.2f}")
