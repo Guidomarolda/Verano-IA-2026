@@ -7,6 +7,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import cross_val_score, StratifiedKFold
+
 
 # Reproducible
 rng = np.random.default_rng(42)
@@ -120,3 +125,31 @@ for d in [1, 2, 3, 4, None]:
     scores = cross_val_score(rf, X, y, cv=cv, scoring="accuracy")
     label = f"rf_depth={d}" if d is not None else "rf_depth=None"
     print(f"{label:12s} -> scores={scores.round(2)} | mean={scores.mean():.2f}")
+
+# KNN con normalizacion (Pipeline)
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=1)
+
+print("\n=== KNN ===")
+
+for k in [1, 3, 5, 7]:
+    knn = Pipeline([
+        ("scaler", StandardScaler()),
+        ("model", KNeighborsClassifier(n_neighbors=k))
+    ])
+    
+    scores = cross_val_score(knn, X, y, cv=cv, scoring="accuracy")
+    print(f"k={k:<2} -> scores={scores.round(2)} | mean={scores.mean():.2f}")
+
+# Modelo final
+rf_final = RandomForestClassifier(
+    n_estimators=100,
+    max_depth=2,
+    random_state=1
+)
+
+rf_final.fit(X, y)
+
+print("\n=== MODELO FINAL ===")
+print("Feature importance:")
+for col, imp in zip(X.columns, rf_final.feature_importances_):
+    print(f"{col}: {imp:.3f}")
