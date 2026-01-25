@@ -153,3 +153,31 @@ print("\n=== MODELO FINAL ===")
 print("Feature importance:")
 for col, imp in zip(X.columns, rf_final.feature_importances_):
     print(f"{col}: {imp:.3f}")
+
+# Comparacion sin pipeline (normalizacion manual)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+scores = cross_val_score(
+    LogisticRegression(max_iter=1000),
+    X_scaled,
+    y,
+    cv=5
+)
+
+print("Sin pipeline:", scores.mean())
+
+# Comparacion con pipeline
+pipe = Pipeline([
+    ("scaler", StandardScaler()),
+    ("model", LogisticRegression(max_iter=1000))
+])
+
+scores = cross_val_score(
+    pipe,
+    X,
+    y,
+    cv=5
+)
+
+print("Con pipeline:", scores.mean())
