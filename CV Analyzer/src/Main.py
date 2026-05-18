@@ -3,6 +3,8 @@ import re
 
 # Skills que vamos a detectar en el MVP
 SKILLS = ["Python", "Machine Learning", "SQL", "Java", "Git"]
+REQUIRED_SKILLS = ["Python", "Machine Learning", "SQL"]
+JOB_TITLE = "Data Analyst Junior"
 
 # Ruta a la carpeta data
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
@@ -43,25 +45,12 @@ def calculate_score(skills, experience):
     score = 0
     reasons = []
 
-    if "Python" in skills:
-        score += 2
-        reasons.append("Tiene Python (+2)")
-
-    if "Machine Learning" in skills:
-        score += 2
-        reasons.append("Tiene Machine Learning (+2)")
-
-    if "SQL" in skills:
-        score += 1
-        reasons.append("Tiene SQL (+1)")
-
-    if "Java" in skills:
-        score += 1
-        reasons.append("Tiene Java (+1)")
-
-    if "Git" in skills:
-        score += 1
-        reasons.append("Tiene Git (+1)")
+    for skill in REQUIRED_SKILLS:
+        if skill in skills:
+            score += 2
+            reasons.append(f"Tiene la skill requerida: {skill} (+2)")
+        else:
+            reasons.append(f"No tiene la skill requerida: {skill} (+0)")
 
     if experience > 2:
         score += 1
@@ -73,6 +62,7 @@ def calculate_score(skills, experience):
 def main():
     cv_files = list(DATA_DIR.glob("*.txt"))
     candidates = []
+    
 
     for cv_file in cv_files:
         text = read_cv(cv_file)
@@ -90,7 +80,12 @@ def main():
         candidates.append(candidate)
 
     candidates = sorted(candidates, key=lambda c: c["score"], reverse=True)
-
+    
+    print(f"Puesto evaluado: {JOB_TITLE}")
+    print("Skills requeridas para el puesto:")
+    for skill in REQUIRED_SKILLS:
+        print(f"- {skill}")
+    
     print("\n=== RANKING DE CANDIDATOS ===")
 
     for i, candidate in enumerate(candidates, start=1):
