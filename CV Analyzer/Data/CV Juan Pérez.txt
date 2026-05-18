@@ -1,0 +1,16 @@
+Juan Pérez
+
+Desarrollador backend con 3 años de experiencia en desarrollo de software.
+Trabajó en proyectos de automatización, APIs REST y análisis de datos.
+
+Skills:
+Python, SQL, Git
+
+Experiencia:
+- Desarrollo de scripts para automatizar reportes internos.
+- Creación de APIs para sistemas administrativos.
+- Manejo de bases de datos relacionales.
+- Trabajo con control de versiones usando Git.
+
+Educación:
+Estudiante avanzado de Ingeniería Informática.

@@ -1,0 +1,17 @@
+Luis Martínez
+
+Perfil orientado a datos con 4 años de experiencia en análisis, automatización y modelos predictivos.
+Trabajó en proyectos relacionados con Machine Learning y procesamiento de datos.
+
+Skills:
+Python, Machine Learning, SQL, Git
+
+Experiencia:
+- Entrenamiento de modelos simples de clasificación.
+- Análisis de datasets con Python.
+- Limpieza y transformación de datos.
+- Consultas SQL para extracción de información.
+- Uso de Git en proyectos colaborativos.
+
+Educación:
+Licenciatura en Sistemas.

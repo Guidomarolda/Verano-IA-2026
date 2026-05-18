@@ -1,0 +1,16 @@
+Ana Gómez
+
+Estudiante de Ingeniería Informática con experiencia académica en programación y bases de datos.
+Participó en proyectos universitarios usando Java y SQL.
+
+Skills:
+Java, SQL, Git
+
+Experiencia:
+- Desarrollo de aplicaciones simples en Java.
+- Diseño de bases de datos para trabajos prácticos.
+- Participación en proyectos grupales de software.
+- Uso básico de Git para control de versiones.
+
+Educación:
+Ingeniería Informática en curso.
