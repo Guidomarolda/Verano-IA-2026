@@ -8,6 +8,11 @@ JOB_TITLE = "Data Analyst Junior"
 SKILL_POINTS = 2
 EXPERIENCE_POINTS = 1
 MIN_EXPERIENCE_YEARS = 2
+JOB_DESCRIPTION = """
+Buscamos un Data Analyst Junior con conocimientos en Python, SQL y Machine Learning.
+Se valoran buenas prácticas con Git y experiencia trabajando con datos.
+"""
+
 
 # Ruta a la carpeta data
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
@@ -47,12 +52,12 @@ def extract_experience(text):
     return 0
 
 
-def calculate_score(skills, experience):
+def calculate_score(skills, experience, required_skills):
     """Calcula un puntaje simple para cada candidato."""
     score = 0
     reasons = []
 
-    for skill in REQUIRED_SKILLS:
+    for skill in required_skills:
         if skill in skills:
             score += SKILL_POINTS
             reasons.append(f"Tiene la skill requerida: {skill} (+{SKILL_POINTS})")
@@ -68,20 +73,20 @@ def calculate_score(skills, experience):
     return score, reasons
 
 
-def calculate_max_score():
+def calculate_max_score(required_skills):
     """Calcula el puntaje máximo posible según las reglas actuales."""
-    skill_points = len(REQUIRED_SKILLS) * SKILL_POINTS
+    skill_points = len(required_skills) * SKILL_POINTS
     experience_points = EXPERIENCE_POINTS
 
     return skill_points + experience_points
 
 
-def analyze_cv(cv_file):
+def analyze_cv(cv_file, required_skills):
     """Analiza un CV y devuelve la información del candidato."""
     text = read_cv(cv_file)
     skills = extract_skills(text)
     experience = extract_experience(text)
-    score, reasons = calculate_score(skills, experience)
+    score, reasons = calculate_score(skills, experience, required_skills)
 
     return {
         "file": cv_file.name,
@@ -92,9 +97,9 @@ def analyze_cv(cv_file):
     }
 
 
-def print_candidate(candidate, position):
+def print_candidate(candidate, position, required_skills):
     """Muestra en pantalla la información de un candidato."""
-    max_score = calculate_max_score()
+    max_score = calculate_max_score(required_skills)
 
     print(f"\n{position}. {candidate['file']}")
     print(f"Score: {candidate['score']}/{max_score}")
@@ -105,30 +110,36 @@ def print_candidate(candidate, position):
         print(f"- {reason}")
 
 
-def rank_candidates(cv_files):
+def rank_candidates(cv_files, required_skills):
     """Analiza CVs y devuelve los candidatos ordenados por puntaje."""
     candidates = []
 
     for cv_file in cv_files:
-        candidate = analyze_cv(cv_file)
+        candidate = analyze_cv(cv_file, required_skills)
         candidates.append(candidate)
 
     return sorted(candidates, key=lambda c: c["score"], reverse=True)
 
 
+def extract_required_skills(job_description):
+    """Extrae skills requeridas desde la descripción del puesto."""
+    return extract_skills(job_description)
+
+
 def main():
     cv_files = list(DATA_DIR.glob("*.txt"))
-    candidates = rank_candidates(cv_files)
+    required_skills = extract_required_skills(JOB_DESCRIPTION)
+    candidates = rank_candidates(cv_files,  required_skills)
 
     print(f"Puesto evaluado: {JOB_TITLE}")
     print("Skills requeridas para el puesto:")
 
-    for skill in REQUIRED_SKILLS:
+    for skill in required_skills:
         print(f"- {skill}")
     
     print("\n=== RANKING DE CANDIDATOS ===")
     for i, candidate in enumerate(candidates, start=1):
-        print_candidate(candidate, i)
+        print_candidate(candidate, i, required_skills)
 
 if __name__ == "__main__":
     main()
